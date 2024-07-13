@@ -6,8 +6,14 @@ export class ScraperController {
   constructor(private readonly scraperService: ScraperService) {}
 
   @Get('mostplayed')
-  async getCharts() {
+  async scrapMostPlayed() {
     const charts = await this.scraperService.scrapMostPlayedCharts();
+    return charts;
+  }
+
+  @Get('topseller')
+  async scrapTopSeller() {
+    const charts = await this.scraperService.scrapTopSellerCharts();
     return charts;
   }
 }
