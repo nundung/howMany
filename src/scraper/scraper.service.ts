@@ -1,66 +1,92 @@
-import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
-import { firstValueFrom, lastValueFrom } from 'rxjs';
-import { takeCoverage } from 'v8';
+import { Cron, CronExpression } from '@nestjs/schedule';
+import { Injectable, Logger } from '@nestjs/common';
 
 const puppeteer = require('puppeteer');
 
 @Injectable()
 export class ScraperService {
-  constructor(private readonly httpService: HttpService) {}
+  private readonly logger = new Logger(ScraperService.name);
 
-  async scrapeMostPlayedCharts() {
-    // Puppeteer 브라우저 실행
+  @Cron(CronExpression.EVERY_HOUR)
+  async handleCron() {
+    this.logger.debug('Running scheduled scraping task');
+    await this.scrapMostPlayedCharts();
+    await this.scrapTopSellerCharts();
+  }
+
+  async scrapMostPlayedCharts() {
     const browser = await puppeteer.launch({
-      headless: false,
+      // headless: false,
     });
     const page = await browser.newPage();
 
-    await page.goto('https://store.steampowered.com/charts/mostplayed', {});
+    try {
+      await page.goto('https://store.steampowered.com/charts/mostplayed', {});
+      const tableSelector =
+        '#page_root > div:nth-child(5) > div > div > div > div._3sJkwsBQuiAc_i3VOWX4tv > table';
+      await page.waitForSelector(tableSelector);
 
-    const tableSelector =
-      '#page_root > div:nth-child(5) > div > div > div > div._3sJkwsBQuiAc_i3VOWX4tv > table';
-    await page.waitForSelector(tableSelector);
-
-    // 각 행의 데이터를 추출
-    const games = await page.evaluate((tableSelector) => {
-      const rows = document.querySelectorAll(`${tableSelector} > tbody > tr`);
-      const gamesList = [];
-
-      rows.forEach((row) => {
-        const blankElement = row.querySelector('td:nth-child(1)');
-        const rankElement = row.querySelector('td:nth-child(2)');
-        const nameElement = row.querySelector('td:nth-child(3)');
-        const priceElement = row.querySelector('td:nth-child(4)');
-        const currentPlayersElement = row.querySelector('td:nth-child(5)');
-        const peakPlayersElement = row.querySelector('td:nth-child(6)');
-
-        const blank = blankElement ? blankElement.textContent.trim() : '';
-        const rank = rankElement ? rankElement.textContent.trim() : '';
-        const name = nameElement ? nameElement.textContent.trim() : '';
-        const price = priceElement ? priceElement.textContent.trim() : '';
-        const currentPlayers = currentPlayersElement
-          ? currentPlayersElement.textContent.trim().replace(/,/g, '')
-          : '';
-        const peakPlayers = peakPlayersElement
-          ? peakPlayersElement.textContent.trim().replace(/,/g, '')
-          : '';
-
-        gamesList.push({
-          blank,
-          rank,
-          name,
-          price,
-          currentPlayers,
-          peakPlayers,
+      // 각 행의 데이터를 추출
+      const games = await page.evaluate((tableSelector) => {
+        const rows = document.querySelectorAll(`${tableSelector} > tbody > tr`);
+        return Array.from(rows).map((row) => {
+          const columns = row.querySelectorAll('td');
+          return {
+            rank: columns[1].innerText.trim(),
+            name: columns[2].innerText.trim(),
+            price: columns[3].innerText.trim(),
+            currentPlayers: columns[4].innerText.trim(),
+            peakPlayers: columns[5].innerText.trim(),
+          };
         });
-      });
+      }, tableSelector);
 
-      return gamesList;
-    }, tableSelector);
+      console.log(games);
+      return games;
+    } catch (error) {
+      console.error('Error during scraping:', error);
+    } finally {
+      await browser.close();
+    }
+  }
 
-    console.log(games);
+  async scrapTopSellerCharts() {
+    const browser = await puppeteer.launch({
+      // headless: false,
+    });
+    const page = await browser.newPage();
 
-    await browser.close();
+    try {
+      await page.goto(
+        'https://store.steampowered.com/charts/topselling/KR',
+        {},
+      );
+
+      const tableSelector =
+        '#page_root > div:nth-child(5) > div > div > div > div._3sJkwsBQuiAc_i3VOWX4tv > table';
+      await page.waitForSelector(tableSelector);
+
+      // 각 행의 데이터를 추출
+      const games = await page.evaluate((tableSelector) => {
+        const rows = document.querySelectorAll(`${tableSelector} > tbody > tr`);
+        return Array.from(rows).map((row) => {
+          const columns = row.querySelectorAll('td');
+          return {
+            rank: columns[1].innerText.trim(),
+            name: columns[2].innerText.trim(),
+            price: columns[3].innerText.trim(),
+            change: columns[4].innerText.trim(),
+            weeks: columns[5].innerText.trim(),
+          };
+        });
+      }, tableSelector);
+
+      console.log(games);
+      return games;
+    } catch (error) {
+      console.error('Error during scraping:', error);
+    } finally {
+      await browser.close();
+    }
   }
 }

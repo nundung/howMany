@@ -5,9 +5,15 @@ import { ScraperService } from './scraper.service';
 export class ScraperController {
   constructor(private readonly scraperService: ScraperService) {}
 
-  @Get('charts')
-  async getSteamCharts() {
-    const charts = await this.scraperService.scrapeMostPlayedCharts();
+  @Get('mostplayed')
+  async scrapMostPlayed() {
+    const charts = await this.scraperService.scrapMostPlayedCharts();
+    return charts;
+  }
+
+  @Get('topseller')
+  async scrapTopSeller() {
+    const charts = await this.scraperService.scrapTopSellerCharts();
     return charts;
   }
 }
