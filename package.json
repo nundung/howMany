@@ -24,8 +24,11 @@
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/schedule": "^4.1.0",
     "axios": "^1.7.2",
     "cheerio": "^1.0.0-rc.12",
+    "node-cron": "^3.0.3",
+    "puppeteer": "^22.13.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
   },
