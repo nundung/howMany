@@ -7,10 +7,15 @@ const puppeteer = require('puppeteer');
 export class ScraperService {
   private readonly logger = new Logger(ScraperService.name);
 
-  @Cron(CronExpression.EVERY_HOUR)
+  @Cron('*/15 * * * *')
   async handleCron() {
     this.logger.debug('Running scheduled scraping task');
     await this.scrapMostPlayedCharts();
+  }
+
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  async handleCron2() {
+    this.logger.debug('Running scheduled scraping task');
     await this.scrapTopSellerCharts();
   }
 
