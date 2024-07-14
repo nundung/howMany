@@ -1,9 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Cron, CronExpression } from '@nestjs/schedule';
+import { Injectable, Logger } from '@nestjs/common';
 
 const puppeteer = require('puppeteer');
 
 @Injectable()
 export class ScraperService {
+  private readonly logger = new Logger(ScraperService.name);
+
+  @Cron(CronExpression.EVERY_HOUR)
+  async handleCron() {
+    this.logger.debug('Running scheduled scraping task');
+    await this.scrapMostPlayedCharts();
+    await this.scrapTopSellerCharts();
+  }
+
   async scrapMostPlayedCharts() {
     const browser = await puppeteer.launch({
       // headless: false,
@@ -12,7 +22,6 @@ export class ScraperService {
 
     try {
       await page.goto('https://store.steampowered.com/charts/mostplayed', {});
-
       const tableSelector =
         '#page_root > div:nth-child(5) > div > div > div > div._3sJkwsBQuiAc_i3VOWX4tv > table';
       await page.waitForSelector(tableSelector);
