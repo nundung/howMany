@@ -5,12 +5,6 @@ import { ScraperModule } from './scraper/scraper.module';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
-  imports: [
-    ScheduleModule.forRoot(),
-    ,
-    HttpModule,
-    StaticModule,
-    ScraperModule,
-  ],
+  imports: [ScheduleModule.forRoot(), HttpModule, StaticModule, ScraperModule],
 })
 export class AppModule {}
