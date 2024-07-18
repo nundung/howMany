@@ -30,7 +30,8 @@
 
 ## 3. 시스템 아키텍처
 
-![alt text](image.png)
+![image](https://github.com/user-attachments/assets/29cbf209-aced-4c00-a978-1801c1d04b85)
+
 
 ## 4. ERD
 
