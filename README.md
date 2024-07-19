@@ -35,5 +35,7 @@
 ![image](https://github.com/user-attachments/assets/29cbf209-aced-4c00-a978-1801c1d04b85)
 
 ## 4. ERD
-![erd](https://prod-files-secure.s3.us-west-2.amazonaws.com/4db1d416-5a6e-4684-aa56-edfa8bc7675f/a5484285-8cbe-4c67-82f8-92f03084fa2e/Untitled.png)
+
+![image](https://github.com/user-attachments/assets/9523d1d3-08d7-447b-acdd-84ad5a7dec01)
+
 ## 5. 멤버 및 역할
