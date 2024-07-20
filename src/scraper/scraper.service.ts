@@ -7,13 +7,15 @@ const puppeteer = require('puppeteer');
 export class ScraperService {
   private readonly logger = new Logger(ScraperService.name);
 
+  //MOSTPLAYED (currentPlayer 15분마다 업데이트)
   @Cron('*/15 * * * *')
   async handleCron() {
     this.logger.debug('Running scheduled scraping task');
     await this.scrapMostPlayedCharts();
   }
 
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  //TOP SELLERS (이전 주의 topseller게임)
+  @Cron('0 0 * * *')
   async handleCron2() {
     this.logger.debug('Running scheduled scraping task');
     await this.scrapTopSellerCharts();
