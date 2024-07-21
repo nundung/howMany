@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class MbtiService {
-  analyzeAnswers(answers: number[]): string {
+  analyzeAnswers(answers: number[]): {
+    mbtiType: string;
+    scores: { [key: string]: number };
+  } {
     let scores: { [key: string]: number } = {
       I: 0,
       E: 0,
@@ -42,13 +45,13 @@ export class MbtiService {
       scores[answer === 0 ? type1 : type2]++;
     });
 
-    console.log(scores);
-
-    return (
-      (scores.I > scores.E ? 'I' : 'E') +
-      (scores.N > scores.S ? 'N' : 'S') +
-      (scores.T > scores.F ? 'T' : 'F') +
-      (scores.J > scores.P ? 'J' : 'P')
-    );
+    return {
+      mbtiType:
+        (scores.I > scores.E ? 'I' : 'E') +
+        (scores.N > scores.S ? 'N' : 'S') +
+        (scores.T > scores.F ? 'T' : 'F') +
+        (scores.J > scores.P ? 'J' : 'P'),
+      scores,
+    };
   }
 }
