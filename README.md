@@ -1,10 +1,10 @@
 # howmany
 
-🎮 게임 성향 기반 맞춤 추천 및 통계 분석 플랫폼
+🕹️ 게임 성향 기반 맞춤 추천 및 통계 분석 플랫폼 🎮
 
 저희 플랫폼은 게임을 사랑하는 유저들을 위해 다양한 맞춤형 서비스를 제공합니다. 게임 성향 분석부터 인기 게임 추천, 플레이 타임 분석까지, 여러분의 게임 생활을 더욱 즐겁고 흥미롭게 만들어 드립니다.
 
-Let's play and discover your game world together! 😀🕹️
+Let's play and discover your game world together! 😀
 
 ## 0. 프로젝트 개요
 ✔️ 프로젝트명: how many?
