@@ -47,4 +47,33 @@ Let's play and discover your game world together! 😀🕹️
 
 정태은: 백엔드 개발 및 데이터베이스 설계, PM
 
-## 6. 링크
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/coincidence-one">
+        <img src="https://github.com/coincidence-one.png" width="100px;" alt="wooyeon Won"
+         style="border-radius: 100%; border: 2px solid white;" />
+        <br />
+        <sub>
+          <b>wooyeon Won</b>
+        </sub>
+      </a>
+      <br />
+      Frontend-developer
+    </td>
+    <td align="center">
+      <a href="https://github.com/nundung">
+        <img src="https://github.com/nundung.png" width="100px;" alt="Taeeun Jeong" style="border-radius: 100%; border: 2px solid white;" />
+        <br />
+        <sub>
+          <b>taeeun Jeong</b>
+        </sub>
+      </a>
+      <br />
+      Backend-developer, PM
+    </td>
+  </tr>
+</table>
+
+## 6. 기타 링크
