@@ -64,7 +64,7 @@ Let's play and discover your game world together! 😀
     </td>
     <td align="center">
       <a href="https://github.com/nundung">
-        <img src="https://github.com/nundung.png" width="100px;" alt="Taeeun Jeong" style="border-radius: 100%; border: 2px solid white;" />
+        <img src="https://github.com/nundung.png" width="100px;" alt="taeeun Jeong" style="border-radius: 100%; border: 2px solid white;" />
         <br />
         <sub>
           <b>taeeun Jeong</b>
