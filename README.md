@@ -1,9 +1,12 @@
 # howmany
 
-(로고이미지)
+🕹️ 게임 성향 기반 맞춤 추천 및 통계 분석 플랫폼 🎮
+
+저희 플랫폼은 게임을 사랑하는 유저들을 위해 다양한 맞춤형 서비스를 제공합니다. 게임 성향 분석부터 인기 게임 추천, 플레이 타임 분석까지, 여러분의 게임 생활을 더욱 즐겁고 흥미롭게 만들어 드립니다.
+
+Let's play and discover your game world together! 😀
 
 ## 0. 프로젝트 개요
-
 ✔️ 프로젝트명: how many?
 
 ✔️ 개발기간: 24.07 - 24.09 (예상)
@@ -15,10 +18,9 @@
 ✔️ 사용기술스택: NestJs, React, Postgres, Figma, Heroku
 
 ## 1. 서비스 및 기능 소개
-
-1.1 사용자 gbti(게임성향) 테스트 및 게임 추천
+1.1 사용자 게임성향(game mbti) 테스트 및 게임 추천
 - 사용자의 게임 선호 성향을 테스트하여 game mbti를 테스트한다.
-
+  
 1.2 topseller게임 / 오늘의 인기게임 추천
 - 주간 topseller 게임 목록 100위와 daily 인기게임 100위를 불러온다.
 
@@ -31,11 +33,47 @@
 ## 2. 서비스 화면
 
 ## 3. 시스템 아키텍처
-
 ![image](https://github.com/user-attachments/assets/29cbf209-aced-4c00-a978-1801c1d04b85)
 
 ## 4. ERD
+![image](https://github.com/user-attachments/assets/46f4d8b2-1950-4de0-b639-930c2302b30c)
 
-![image](https://github.com/user-attachments/assets/9523d1d3-08d7-447b-acdd-84ad5a7dec01)
 
 ## 5. 멤버 및 역할
+
+원우연: 프론트엔드 개발
+
+이안나: UI/UX 디자이너
+
+정태은: 백엔드 개발 및 데이터베이스 설계, PM
+
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/coincidence-one">
+        <img src="https://github.com/coincidence-one.png" width="100px;" alt="wooyeon Won"
+         style="border-radius: 100%; border: 2px solid white;" />
+        <br />
+        <sub>
+          <b>wooyeon Won</b>
+        </sub>
+      </a>
+      <br />
+      Frontend-developer
+    </td>
+    <td align="center">
+      <a href="https://github.com/nundung">
+        <img src="https://github.com/nundung.png" width="100px;" alt="taeeun Jeong" style="border-radius: 100%; border: 2px solid white;" />
+        <br />
+        <sub>
+          <b>taeeun Jeong</b>
+        </sub>
+      </a>
+      <br />
+      Backend-developer, PM
+    </td>
+  </tr>
+</table>
+
+## 6. 기타 링크
