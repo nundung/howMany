@@ -1,5 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { ScraperService } from './scraper.service';
+import { query } from 'express';
 
 @Controller('scraper')
 export class ScraperController {
@@ -12,8 +13,8 @@ export class ScraperController {
   }
 
   @Get('topseller')
-  async scrapTopSeller() {
-    const charts = await this.scraperService.scrapTopSellerCharts();
+  async scrapTopSeller(@Query('region') region: string) {
+    const charts = await this.scraperService.scrapTopSellerCharts(region);
     return charts;
   }
 }
