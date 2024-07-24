@@ -9,29 +9,34 @@ export class ScraperService {
 
   //MOSTPLAYED (currentPlayer 15분마다 업데이트)
   @Cron('*/15 * * * *')
-  async handleCron() {
-    this.logger.debug('Running scheduled scraping task');
+  async handleCronFor15minute() {
+    this.logger.debug('Running scheduled scraping task for most played charts');
     await this.scrapMostPlayedCharts();
   }
 
   //TOP SELLERS (Top 100 selling games right now, by revenue)
-  @Cron('0 0 * * *')
-  async handleCron2() {
-    this.logger.debug('Running scheduled scraping task');
-    await this.scrapTopSellerCharts();
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  async handleCronForEveryDay() {
+    this.logger.debug('Running scheduled scraping task for top sellers');
+    await this.scrapTopSellerCharts('KR');
+    await this.scrapTopSellerCharts('US');
+    await this.scrapTopSellerCharts('JP');
+    await this.scrapTopSellerCharts('CN');
   }
 
+  //MOSTPLAYED (currentPlayer 15분마다 업데이트)
   async scrapMostPlayedCharts() {
     const browser = await puppeteer.launch({
-      // headless: false,
+      headless: false,
     });
     const page = await browser.newPage();
 
     try {
-      await page.goto('https://store.steampowered.com/charts/mostplayed', {});
+      await page.goto('https://store.steampowered.com/charts/mostplayed');
       const tableSelector =
         '#page_root > div:nth-child(5) > div > div > div > div._3sJkwsBQuiAc_i3VOWX4tv > table';
       await page.waitForSelector(tableSelector);
+
       // 각 행의 데이터를 추출
       const games = await page.evaluate((tableSelector) => {
         const rows = document.querySelectorAll(`${tableSelector} > tbody > tr`);
@@ -46,7 +51,6 @@ export class ScraperService {
           };
         });
       }, tableSelector);
-
       console.log(games);
       return games;
     } catch (error) {
@@ -57,18 +61,17 @@ export class ScraperService {
   }
 
   //TOP SELLERS (Top 100 selling games right now, by revenue)
-  async scrapTopSellerCharts() {
+  async scrapTopSellerCharts(region: string) {
     const browser = await puppeteer.launch({
-      // headless: false,
+      headless: false,
     });
     const page = await browser.newPage();
-
     try {
       await page.goto(
-        'https://store.steampowered.com/charts/topselling/KR',
-        {},
+        `https://store.steampowered.com/charts/topselling/${region}`,
       );
 
+      // 차트 데이터 추출
       const tableSelector =
         '#page_root > div:nth-child(5) > div > div > div > div._3sJkwsBQuiAc_i3VOWX4tv > table';
       await page.waitForSelector(tableSelector);
@@ -87,7 +90,6 @@ export class ScraperService {
           };
         });
       }, tableSelector);
-
       console.log(games);
       return games;
     } catch (error) {
