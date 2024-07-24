@@ -14,7 +14,7 @@ export class ScraperService {
     await this.scrapMostPlayedCharts();
   }
 
-  //TOP SELLERS (이전 주의 topseller게임)
+  //TOP SELLERS (Top 100 selling games right now, by revenue)
   @Cron('0 0 * * *')
   async handleCron2() {
     this.logger.debug('Running scheduled scraping task');
@@ -32,7 +32,6 @@ export class ScraperService {
       const tableSelector =
         '#page_root > div:nth-child(5) > div > div > div > div._3sJkwsBQuiAc_i3VOWX4tv > table';
       await page.waitForSelector(tableSelector);
-
       // 각 행의 데이터를 추출
       const games = await page.evaluate((tableSelector) => {
         const rows = document.querySelectorAll(`${tableSelector} > tbody > tr`);
@@ -57,6 +56,7 @@ export class ScraperService {
     }
   }
 
+  //TOP SELLERS (Top 100 selling games right now, by revenue)
   async scrapTopSellerCharts() {
     const browser = await puppeteer.launch({
       // headless: false,
@@ -81,9 +81,9 @@ export class ScraperService {
           return {
             rank: columns[1].innerText.trim(),
             name: columns[2].innerText.trim(),
-            price: columns[3].innerText.trim(),
-            change: columns[4].innerText.trim(),
-            weeks: columns[5].innerText.trim(),
+            price: columns[3].innerText.trim(), //Today's price for this game.
+            change: columns[4].innerText.trim(), //Change in rank compared to previous week.
+            weeks: columns[5].innerText.trim(), //Number of weeks in top 100
           };
         });
       }, tableSelector);
