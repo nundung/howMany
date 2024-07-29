@@ -1,8 +1,4 @@
-import { Cache } from 'cache-manager';
-import { AxiosResponse } from 'axios';
-import { firstValueFrom, map } from 'rxjs';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { cacheService } from 'src/common/cache/cache.service';
 
 @Injectable()
@@ -11,11 +7,12 @@ export class StaticService {
 
   constructor(private readonly cachService: cacheService) {}
 
-  async getMostPlayedCharts() {
+  async getMostPlayedCharts(): Promise<{ cachedCharts: string }> {
     try {
-      // 캐시에서 데이터 가져오기
+      //캐시에서 데이터 가져오기
       const cachedCharts = await this.cachService.get('mostPlayedCharts');
       this.logger.debug('Returning cached most played charts data');
+
       return JSON.parse(cachedCharts);
     } catch (error) {
       console.error('Steam API 요청 실패:', error);
@@ -23,12 +20,17 @@ export class StaticService {
     }
   }
 
-  async getTopSellerCharts(region: string) {
+  async getTopSellerCharts(region: string): Promise<{ cachedCharts: string }> {
     try {
-      // 캐시에서 데이터 가져오기
-      const cachedCharts = await this.cachService.get('topSellerCharts');
-      this.logger.debug('Returning cached most played charts data');
-      return cachedCharts;
+      //캐시에서 데이터 가져오기
+      const cachedCharts = await this.cachService.get(
+        `topSellerCharts:${region}`,
+      );
+      this.logger.debug(
+        `Returning cached top seller charts for ${region} data`,
+      );
+
+      return JSON.parse(cachedCharts);
     } catch (error) {
       console.error('Steam API 요청 실패:', error);
       throw error;

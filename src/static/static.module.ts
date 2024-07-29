@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
-import { StaticContoller } from './static.controller';
 import { StaticService } from './static.service';
-import { CacheMoudle } from 'src/common/cache/cache.module';
+import { StaticContoller } from './static.controller';
+import { CacheConfigMoudle } from 'src/common/cache/cache.module';
 
 @Module({
-  imports: [HttpModule, CacheMoudle],
+  imports: [HttpModule, CacheConfigMoudle],
   controllers: [StaticContoller],
   providers: [StaticService],
 })

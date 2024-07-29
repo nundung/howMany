@@ -1,7 +1,5 @@
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { Inject, Injectable, Logger } from '@nestjs/common';
-import { Cache } from 'cache-manager';
+import { Injectable, Logger } from '@nestjs/common';
 import { cacheService } from 'src/common/cache/cache.service';
 
 const puppeteer = require('puppeteer');
@@ -20,7 +18,8 @@ export class ScraperService {
   }
 
   //TOP SELLERS (Top 100 selling games right now, by revenue)
-  @Cron('*/15 * * * *')
+  //하루마다 불러오도록 cron설정
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async handleCronForEveryDay() {
     this.logger.debug('Running scheduled scraping task for top sellers');
     await this.scrapTopSellerCharts('KR');
@@ -62,12 +61,9 @@ export class ScraperService {
         JSON.stringify(games),
         900,
       );
-      const result = await this.cacheService.get('mostPlayedCharts');
-
-      console.log(result[0]);
-
       this.logger.debug('Most played charts data cached');
-      return games; // `games` 반환
+
+      return games;
     } catch (error) {
       console.error('Error during scraping:', error);
     } finally {
@@ -106,11 +102,14 @@ export class ScraperService {
         });
       }, tableSelector);
 
-      // 캐시에 데이터 저장
-      await this.cacheService.set(`topSellerCharts:${region}`, games, 86400); // TTL 24시간
+      //캐시에 데이터 저장 (TTL 15분)
+      await this.cacheService.set(
+        `topSellerCharts:${region}`,
+        JSON.stringify(games),
+        86400,
+      );
       this.logger.debug(`Top seller charts data for region ${region} cached`);
 
-      console.log(games);
       return games;
     } catch (error) {
       console.error('Error during scraping:', error);
