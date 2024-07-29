@@ -1,11 +1,16 @@
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Cache } from 'cache-manager';
+import { cacheService } from 'src/common/cache/cache.service';
 
 const puppeteer = require('puppeteer');
 
 @Injectable()
 export class ScraperService {
   private readonly logger = new Logger(ScraperService.name);
+
+  constructor(private readonly cacheService: cacheService) {}
 
   //MOSTPLAYED (currentPlayer 15분마다 업데이트)
   @Cron('*/15 * * * *')
@@ -15,7 +20,7 @@ export class ScraperService {
   }
 
   //TOP SELLERS (Top 100 selling games right now, by revenue)
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  @Cron('*/15 * * * *')
   async handleCronForEveryDay() {
     this.logger.debug('Running scheduled scraping task for top sellers');
     await this.scrapTopSellerCharts('KR');
@@ -24,7 +29,6 @@ export class ScraperService {
     await this.scrapTopSellerCharts('CN');
   }
 
-  //MOSTPLAYED (currentPlayer 15분마다 업데이트)
   async scrapMostPlayedCharts() {
     const browser = await puppeteer.launch({
       headless: false,
@@ -51,8 +55,19 @@ export class ScraperService {
           };
         });
       }, tableSelector);
-      console.log(games);
-      return games;
+
+      // 캐시에 데이터 저장 (TTL 15분)
+      await this.cacheService.set(
+        'mostPlayedCharts',
+        JSON.stringify(games),
+        900,
+      );
+      const result = await this.cacheService.get('mostPlayedCharts');
+
+      console.log(result[0]);
+
+      this.logger.debug('Most played charts data cached');
+      return games; // `games` 반환
     } catch (error) {
       console.error('Error during scraping:', error);
     } finally {
@@ -90,6 +105,11 @@ export class ScraperService {
           };
         });
       }, tableSelector);
+
+      // 캐시에 데이터 저장
+      await this.cacheService.set(`topSellerCharts:${region}`, games, 86400); // TTL 24시간
+      this.logger.debug(`Top seller charts data for region ${region} cached`);
+
       console.log(games);
       return games;
     } catch (error) {
