@@ -9,7 +9,7 @@ import {
 } from '@nestjs/swagger';
 
 @Controller('scraper')
-@ApiTags('scraper API')
+@ApiTags('(backend 테스트용) scraper API')
 export class ScraperController {
   constructor(private readonly scraperService: ScraperService) {}
 
