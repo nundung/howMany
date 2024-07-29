@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { cacheService } from 'src/common/cache/cache.service';
+import { cacheService } from 'src/cache/cache.service';
 
 @Injectable()
 export class StaticService {
