@@ -6,7 +6,7 @@ export class MbtiService {
     mbtiType: string;
     scores: { [key: string]: number };
   } {
-    let scores: { [key: string]: number } = {
+    let initialScores: { [key: string]: number } = {
       I: 0,
       E: 0,
       S: 0,
@@ -40,10 +40,14 @@ export class MbtiService {
       19: ['P', 'J'],
     };
 
-    answers.forEach((answer, index) => {
-      const [type1, type2] = answerMappings[index];
-      scores[answer === 0 ? type1 : type2]++;
-    });
+    const scores = answers.reduce(
+      (accumulator, currentValue, currentIndex) => {
+        const [type1, type2] = answerMappings[currentIndex];
+        accumulator[currentValue === 0 ? type1 : type2]++;
+        return accumulator;
+      },
+      { ...initialScores },
+    );
 
     return {
       mbtiType:
