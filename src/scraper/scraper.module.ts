@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { ScraperService } from './scraper.service';
 import { ScraperController } from './scraper.controller';
-import { HttpModule } from '@nestjs/axios';
-import { CacheMoudle } from 'src/common/cache/cache.module';
+import { CacheConfigMoudle } from 'src/common/cache/cache.module';
 
 @Module({
-  imports: [HttpModule, CacheMoudle],
+  imports: [HttpModule, CacheConfigMoudle],
   controllers: [ScraperController],
   providers: [ScraperService],
 })
