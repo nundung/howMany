@@ -8,7 +8,7 @@ import {
   ApiQuery,
 } from '@nestjs/swagger';
 
-@Controller('scraper')
+@Controller('api/v1/scraper') // v1 버전을 포함한 경로
 @ApiTags('(backend 테스트용) scraper API')
 export class ScraperController {
   constructor(private readonly scraperService: ScraperService) {}
