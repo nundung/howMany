@@ -15,7 +15,7 @@ import {
   ApiBadRequestResponse,
 } from '@nestjs/swagger';
 
-@Controller('mbti')
+@Controller('api/v1/mbti')
 @ApiTags('mbti API')
 export class MbtiController {
   constructor(private readonly mbtiService: MbtiService) {}
