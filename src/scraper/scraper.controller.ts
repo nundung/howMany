@@ -42,7 +42,7 @@ export class ScraperController {
       },
     },
   })
-  @Get('mostplayed')
+  @Get('most-played')
   async scrapMostPlayed() {
     const charts = await this.scraperService.scrapMostPlayedCharts();
     return charts;
@@ -81,7 +81,7 @@ export class ScraperController {
     required: true,
     type: 'string',
   })
-  @Get('topseller')
+  @Get('top-seller')
   async scrapTopSeller(@Query('region') region: string) {
     const charts = await this.scraperService.scrapTopSellerCharts(region);
     return charts;

@@ -42,7 +42,7 @@ export class StaticContoller {
       },
     },
   })
-  @Get('mostplayed')
+  @Get('most-played')
   async scrapMostPlayed() {
     const charts = await this.staticService.getMostPlayedCharts();
     return charts;
@@ -81,7 +81,7 @@ export class StaticContoller {
     required: true,
     type: 'string',
   })
-  @Get('topseller')
+  @Get('top-seller')
   async scrapTopSeller(@Query('region') region: string) {
     const charts = await this.staticService.getTopSellerCharts(region);
     return charts;
