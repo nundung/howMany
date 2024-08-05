@@ -10,6 +10,21 @@ export class ScraperService {
 
   constructor(private readonly cacheService: cacheService) {}
 
+  // 서버 시작 시 초기 스크래핑 작업
+  async onModuleInit() {
+    this.logger.debug('Running initial scraping tasks');
+    try {
+      await this.scrapMostPlayedCharts();
+      await this.scrapTopSellerCharts('KR');
+      await this.scrapTopSellerCharts('US');
+      await this.scrapTopSellerCharts('JP');
+      await this.scrapTopSellerCharts('CN');
+      this.logger.debug('Initial scraping tasks completed');
+    } catch (error) {
+      this.logger.error('Error during initial scraping tasks', error);
+    }
+  }
+
   //MOSTPLAYED (currentPlayer 15분마다 업데이트)
   @Cron('*/15 * * * *')
   async handleCronFor15minute() {
@@ -30,7 +45,10 @@ export class ScraperService {
 
   async scrapMostPlayedCharts() {
     const browser = await puppeteer.launch({
-      headless: false,
+      headless: true,
+      executablePath: '/usr/bin/chromium-browser',
+      // executablePath: '/opt/homebrew/bin/chromium',
+      // args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
 
@@ -74,7 +92,9 @@ export class ScraperService {
   //TOP SELLERS (Top 100 selling games right now, by revenue)
   async scrapTopSellerCharts(region: string) {
     const browser = await puppeteer.launch({
-      headless: false,
+      // executablePath: '/opt/homebrew/bin/chromium',
+      headless: true,
+      executablePath: '/usr/bin/chromium-browser',
     });
     const page = await browser.newPage();
     try {
