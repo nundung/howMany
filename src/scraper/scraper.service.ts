@@ -1,6 +1,6 @@
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { Injectable, Logger } from '@nestjs/common';
-import { cacheService } from 'src/cache/cache.service';
+import { CacheService } from 'src/cache/cache.service';
 
 const puppeteer = require('puppeteer');
 
@@ -8,7 +8,7 @@ const puppeteer = require('puppeteer');
 export class ScraperService {
   private readonly logger = new Logger(ScraperService.name);
 
-  constructor(private readonly cacheService: cacheService) {}
+  constructor(private readonly cacheService: CacheService) {}
 
   // 서버 시작 시 초기 스크래핑 작업
   async onModuleInit() {
@@ -47,11 +47,9 @@ export class ScraperService {
     const browser = await puppeteer.launch({
       headless: true,
       executablePath: '/usr/bin/chromium-browser',
-      // executablePath: '/opt/homebrew/bin/chromium',
       // args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
-
     try {
       await page.goto('https://store.steampowered.com/charts/mostplayed');
       const tableSelector =
@@ -92,7 +90,6 @@ export class ScraperService {
   //TOP SELLERS (Top 100 selling games right now, by revenue)
   async scrapTopSellerCharts(region: string) {
     const browser = await puppeteer.launch({
-      // executablePath: '/opt/homebrew/bin/chromium',
       headless: true,
       executablePath: '/usr/bin/chromium-browser',
     });
