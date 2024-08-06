@@ -1,6 +1,6 @@
 import { CacheModule } from '@nestjs/cache-manager';
 import { Global, Module } from '@nestjs/common';
-import { cacheService } from './cache.service';
+import { CacheService } from './cache.service';
 
 @Global()
 @Module({
@@ -11,7 +11,7 @@ import { cacheService } from './cache.service';
       ttl: 900, //기본 TTL (초)
     }),
   ],
-  providers: [cacheService],
-  exports: [cacheService],
+  providers: [CacheService],
+  exports: [CacheService],
 })
 export class CacheConfigMoudle {}
