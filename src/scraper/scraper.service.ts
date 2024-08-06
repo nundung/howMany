@@ -59,14 +59,36 @@ export class ScraperService {
       // 각 행의 데이터를 추출
       const games = await page.evaluate((tableSelector) => {
         const rows = document.querySelectorAll(`${tableSelector} > tbody > tr`);
+
         return Array.from(rows).map((row) => {
           const columns = row.querySelectorAll('td');
+
+          // 이미지 URL 추출
+          let imageUrl = '';
+          const imgElement = columns[2].querySelector(
+            'a > img',
+          ) as HTMLImageElement; // 이미지가 있는 <a> 내부의 <img> 태그를 찾음
+          if (imgElement) {
+            imageUrl = imgElement.src;
+          }
+
+          // 브라우저 콘솔에 로그 찍기
+          console.log({
+            rank: columns[1].innerText.trim(),
+            name: columns[2].innerText.trim(),
+            price: columns[3].innerText.trim(),
+            currentPlayers: columns[4].innerText.trim(),
+            peakPlayers: columns[5].innerText.trim(),
+            imageUrl,
+          });
+
           return {
             rank: columns[1].innerText.trim(),
             name: columns[2].innerText.trim(),
             price: columns[3].innerText.trim(),
             currentPlayers: columns[4].innerText.trim(),
             peakPlayers: columns[5].innerText.trim(),
+            imageUrl, // 이미지 URL 추가
           };
         });
       }, tableSelector);
@@ -78,7 +100,6 @@ export class ScraperService {
         900,
       );
       this.logger.debug('Most played charts data cached');
-
       return games;
     } catch (error) {
       console.error('Error during scraping:', error);
@@ -109,12 +130,23 @@ export class ScraperService {
         const rows = document.querySelectorAll(`${tableSelector} > tbody > tr`);
         return Array.from(rows).map((row) => {
           const columns = row.querySelectorAll('td');
+
+          // 이미지 URL 추출
+          let imageUrl = '';
+          const imgElement = columns[2].querySelector(
+            'a > img',
+          ) as HTMLImageElement; // 이미지가 있는 <a> 내부의 <img> 태그를 찾음
+          if (imgElement) {
+            imageUrl = imgElement.src;
+          }
+
           return {
             rank: columns[1].innerText.trim(),
             name: columns[2].innerText.trim(),
             price: columns[3].innerText.trim(), //Today's price for this game.
             change: columns[4].innerText.trim(), //Change in rank compared to previous week.
             weeks: columns[5].innerText.trim(), //Number of weeks in top 100
+            imageUrl, // 이미지 URL 추가
           };
         });
       }, tableSelector);
