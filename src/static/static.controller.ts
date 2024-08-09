@@ -7,6 +7,12 @@ import {
   ApiBadRequestResponse,
   ApiQuery,
 } from '@nestjs/swagger';
+import {
+  MostPlayedDto,
+  TopGamesOwnerDto,
+  TopPlayTimeUserDto,
+  TopSellerDto,
+} from './dto';
 
 @Controller('api/v1/static')
 @ApiTags('static API')
@@ -24,24 +30,7 @@ export class StaticContoller {
   })
   @ApiOkResponse({
     description: 'OK',
-    schema: {
-      type: 'object',
-      properties: {
-        charts: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              rank: { type: 'number', example: 1 },
-              name: { type: 'string', example: 'Counter-Strike 2' },
-              price: { type: 'string', example: 'Free To Play' },
-              currentPlayers: { type: 'string', example: '867,766' },
-              peakPlayers: { type: 'string', example: '1,313,419' },
-            },
-          },
-        },
-      },
-    },
+    type: MostPlayedDto, // DTO를 참조합니다.
   })
   @Get('most-played')
   async scrapMostPlayed() {
@@ -56,24 +45,7 @@ export class StaticContoller {
   @ApiBadRequestResponse({ description: 'Invalid request parameters' })
   @ApiOkResponse({
     description: 'OK',
-    schema: {
-      type: 'object',
-      properties: {
-        charts: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              rank: { type: 'number', example: 9 },
-              name: { type: 'string', example: 'Dead by Daylight' },
-              price: { type: 'string', example: '-60%\n₩ 21,500\n₩ 8,600' },
-              change: { type: 'string', example: '▲ 17' },
-              weeks: { type: 'string', example: '376' },
-            },
-          },
-        },
-      },
-    },
+    type: TopSellerDto, // DTO를 참조합니다.
   })
   @ApiQuery({
     name: 'region',
@@ -94,61 +66,7 @@ export class StaticContoller {
   @ApiBadRequestResponse({ description: 'Invalid request parameters' })
   @ApiOkResponse({
     description: 'OK',
-    schema: {
-      type: 'object',
-      properties: {
-        type: { type: 'string', example: 'G' },
-        type_url: { type: 'string', example: 'games' },
-        country_code: { type: 'string', example: 'KR' },
-        ladder: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              pos: { type: 'number', example: 0 },
-              steam_user: {
-                type: 'object',
-                properties: {
-                  steam_name: { type: 'string', example: 'an0rose' },
-                  steam_id: { type: 'string', example: '76561198001221571' },
-                  steamladder_url: {
-                    type: 'string',
-                    example:
-                      'https://steamladder.com/profile/76561198001221571/',
-                  },
-                  steam_join_date: {
-                    type: 'string',
-                    format: 'date-time',
-                    example: '2008-09-16T02:52:45',
-                  },
-                  steam_country_code: { type: 'string', example: 'KR' },
-                  steam_avatar_src: {
-                    type: 'string',
-                    example:
-                      'https://avatars.steamstatic.com/dc59a43c5e23c60b83c22b9841ad09a36ac5a4f8_full.jpg',
-                  },
-                },
-              },
-              steam_stats: {
-                type: 'object',
-                properties: {
-                  level: { type: 'number', example: 458 },
-                  xp: { type: 'number', example: 1076164 },
-                  badges: { type: 'object' }, // Define properties if known
-                  games: {
-                    type: 'object',
-                    properties: {
-                      total_games: { type: 'number', example: 24224 },
-                    },
-                  },
-                  bans: { type: 'object' }, // Define properties if known
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+    type: TopPlayTimeUserDto, // DTO를 사용하여 응답 타입을 명시합니다.
   })
   @ApiQuery({
     name: 'region-or-country-code',
@@ -172,65 +90,7 @@ export class StaticContoller {
   @ApiBadRequestResponse({ description: 'Invalid request parameters' })
   @ApiOkResponse({
     description: 'OK',
-    schema: {
-      type: 'object',
-      properties: {
-        type: { type: 'string', example: 'G' },
-        type_url: { type: 'string', example: 'games' },
-        country_code: { type: 'string', nullable: true, example: null },
-        ladder: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              pos: { type: 'number', example: 0 },
-              steam_user: {
-                type: 'object',
-                properties: {
-                  steam_name: { type: 'string', example: 'Sonix' },
-                  steam_id: { type: 'string', example: '76561198028121353' },
-                  steamladder_url: {
-                    type: 'string',
-                    example:
-                      'https://steamladder.com/profile/76561198028121353/',
-                  },
-                  steam_join_date: {
-                    type: 'string',
-                    format: 'date-time',
-                    example: '2010-07-25T02:59:47',
-                  },
-                  steam_country_code: {
-                    type: 'string',
-                    nullable: true,
-                    example: 'CN',
-                  },
-                  steam_avatar_src: {
-                    type: 'string',
-                    example:
-                      'https://avatars.steamstatic.com/54b97d0998d152f01d876d03dad1fdd2fb642dd2_full.jpg',
-                  },
-                },
-              },
-              steam_stats: {
-                type: 'object',
-                properties: {
-                  level: { type: 'number', example: 296 },
-                  xp: { type: 'number', example: 454205 },
-                  badges: { type: 'object', additionalProperties: true }, // Define properties if known
-                  games: {
-                    type: 'object',
-                    properties: {
-                      total_games: { type: 'number', example: 38664 },
-                    },
-                  },
-                  bans: { type: 'object', additionalProperties: true }, // Define properties if known
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+    type: TopGamesOwnerDto, // DTO를 사용하여 응답 타입을 명시합니다.
   })
   @ApiQuery({
     name: 'regionOrCountryCode',
